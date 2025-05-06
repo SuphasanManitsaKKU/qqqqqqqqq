@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "node24"
+        nodejs 'node24'
     }
 
     environment {
@@ -21,19 +21,11 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     script {
                         def scannerHome = tool name: 'SonarQube', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner
-                        """
+                        sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
             }
         }
-
-        // stage('Run Tests and Generate Coverage') {
-        //     steps {
-        //         sh 'npm run test'
-        //     }
-        // }
 
         stage('Install Dependencies') {
             steps {
@@ -49,15 +41,25 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                // archiveArtifacts artifacts: 'coverage/**, dist/**', allowEmptyArchive: false
                 archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
             }
         }
-    }
 
-    // post {
-    //     always {
-    //         junit 'coverage/clover.xml'
-    //     }
-    // }
+        stage('Deploy to Host') {
+            steps {
+                sh '''
+                DEPLOY_DIR=/mnt/deploy-outside
+                echo "🚮 Cleaning up old deployment..."
+                rm -rf ${DEPLOY_DIR}/*
+
+                echo "📦 Copying new build to ${DEPLOY_DIR}..."
+                cp -r dist/* ${DEPLOY_DIR}/
+
+                echo "🚀 Restarting application..."
+                pm2 delete my-app || true
+                pm2 start ${DEPLOY_DIR}/cmd/server/main.js --name my-app
+                '''
+            }
+        }
+    }
 }

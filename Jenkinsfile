@@ -3,7 +3,6 @@ pipeline {
 
     tools {
         nodejs "node24"
-        SonarQube "SonarQube"
     }
 
     environment {
@@ -38,7 +37,12 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh 'sonar-scanner'
+                    script {
+                        def scannerHome = tool name: 'SonarQube', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner
+                        """
+                    }
                 }
             }
         }

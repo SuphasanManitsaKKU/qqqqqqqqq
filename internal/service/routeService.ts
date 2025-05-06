@@ -127,9 +127,9 @@ export class RouteService {
     });
 
     // ต่อไปคือ check กับ ticket_remain เพื่อเช็คจำนวนตั๋ว
-    if (ticket_remain_number == 0){
+    // if ( ticket_remain_number == 0){
 
-    }
+    // }
 
     // ถ้ายังเหลือจะดึงราคาออกมา จาก 
     // toute_ticket_price where route_id = route.route_id

@@ -48,17 +48,16 @@ pipeline {
         stage('Deploy to Host') {
             steps {
                 sh '''
-                DEPLOY_DIR=/mnt/deploy-outside
-                echo "🚮 Cleaning up old deployment..."
-                rm -rf ${DEPLOY_DIR}/*
+            DEPLOY_DIR=/mnt/deploy-outside
 
-                echo "📦 Copying new build to ${DEPLOY_DIR}..."
-                cp -r dist/* ${DEPLOY_DIR}/
+            echo "🚮 Cleaning up old deployment..."
+            rm -rf ${DEPLOY_DIR}/*
 
-                echo "🚀 Restarting application..."
-                pm2 delete my-app || true
-                pm2 start ${DEPLOY_DIR}/cmd/server/main.js --name my-app
-                '''
+            echo "📦 Copying new build to ${DEPLOY_DIR}..."
+            cp -r dist/* ${DEPLOY_DIR}/
+
+            echo "✅ Build copied to shared folder. Run pm2 manually on host if needed."
+        '''
             }
         }
     }

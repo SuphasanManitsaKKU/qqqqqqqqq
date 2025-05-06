@@ -51,6 +51,7 @@ pipeline {
             DEPLOY_DIR=/mnt/deploy-outside
             echo "🛠️ Ensuring deployment directory exists..."
             mkdir -p $DEPLOY_DIR
+
             echo "🚮 Cleaning up old deployment..."
             rm -rf $DEPLOY_DIR/dist
 
@@ -58,8 +59,7 @@ pipeline {
             cp -r dist/ $DEPLOY_DIR/dist
 
             echo "🚀 Signaling host to restart app..."
-            chmod +x $DEPLOY_DIR/restart.sh
-            $DEPLOY_DIR/restart.sh
+            bash $DEPLOY_DIR/restart.sh
         '''
             }
         }

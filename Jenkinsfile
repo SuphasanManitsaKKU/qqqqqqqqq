@@ -60,13 +60,14 @@ pipeline {
         '''
             }
         }
-        stage('Restart App via SSH') {
+        stage('Remote Restart via SSH') {
             steps {
                 sh '''
-                ssh -i /var/jenkins_home/.ssh/id_jenkins -o StrictHostKeyChecking=no root@host.docker.internal '
-            cd bus-api
+            echo "🚀 Restarting app via SSH on host..."
+            ssh -i /var/jenkins_home/.ssh/id_jenkins -o StrictHostKeyChecking=no root@172.17.0.1 '
+                cd /root/bus-api &&
                 pm2 delete my-app || true &&
-                pm2 start /dist/cmd/server/main.js --name my-app
+                pm2 start /mnt/deploy-outside/dist/cmd/server/main.js --name my-app
             '
         '''
             }

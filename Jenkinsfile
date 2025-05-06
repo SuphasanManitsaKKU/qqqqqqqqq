@@ -65,8 +65,8 @@ pipeline {
                 sh '''
             echo "🚀 Restarting app via SSH on host..."
             ssh -i /var/jenkins_home/.ssh/id_jenkins -o StrictHostKeyChecking=no root@172.17.0.1 '
-                cd /root/bus-api &&
-                pm2 delete my-app || true &&
+                cd /root/bus-api
+                pm2 delete my-app || true
                 pm2 start /mnt/deploy-outside/dist/cmd/server/main.js --name my-app
             '
         '''

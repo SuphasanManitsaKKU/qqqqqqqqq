@@ -57,9 +57,17 @@ pipeline {
 
             echo "📦 Copying new build to $DEPLOY_DIR..."
             cp -r dist/ $DEPLOY_DIR/dist
-
-            echo "🚀 Signaling host to restart app..."
-            bash $DEPLOY_DIR/restart.sh
+        '''
+            }
+        }
+        stage('Restart App via SSH') {
+            steps {
+                sh '''
+                ssh -i /var/jenkins_home/.ssh/id_jenkins -o StrictHostKeyChecking=no root@host.docker.internal '
+            cd bus-api
+                pm2 delete my-app || true &&
+                pm2 start /dist/cmd/server/main.js --name my-app
+            '
         '''
             }
         }

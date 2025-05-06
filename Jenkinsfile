@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "node24" // Node.js version to use 24
+        nodejs "node24" // Node.js version to use 24  fsdf
     }
 
     stages {

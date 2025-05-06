@@ -46,23 +46,22 @@ pipeline {
         }
 
         stage('Deploy to Host') {
-    steps {
-        sh '''
-        ls -la
+            steps {
+                sh '''
             DEPLOY_DIR=/mnt/deploy-outside
             echo "🛠️ Ensuring deployment directory exists..."
-
+            mkdir -p $DEPLOY_DIR
             echo "🚮 Cleaning up old deployment..."
-            rm -rf $DEPLOY_DIR/*
+            rm -rf $DEPLOY_DIR/dist
 
             echo "📦 Copying new build to $DEPLOY_DIR..."
             cp -r dist/ $DEPLOY_DIR/dist
 
-            echo "🚀 Restarting application..."
-            pm2 delete my-app || true
-            pm2 start $DEPLOY_DIR/cmd/server/main.js --name my-app
+            echo "🚀 Signaling host to restart app..."
+            chmod +x $DEPLOY_DIR/restart.sh
+            $DEPLOY_DIR/restart.sh
         '''
-    }
-}
+            }
+        }
     }
 }

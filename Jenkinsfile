@@ -16,24 +16,6 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm ci'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'npm run build'
-            }
-        }
-
-        // stage('Run Tests and Generate Coverage') {
-        //     steps {
-        //         sh 'npm run test'
-        //     }
-        // }
-
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
@@ -47,6 +29,24 @@ pipeline {
             }
         }
 
+        // stage('Run Tests and Generate Coverage') {
+        //     steps {
+        //         sh 'npm run test'
+        //     }
+        // }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
         stage('Archive Artifacts') {
             steps {
                 // archiveArtifacts artifacts: 'coverage/**, dist/**', allowEmptyArchive: false
@@ -55,9 +55,9 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            junit 'coverage/clover.xml'
-        }
-    }
+    // post {
+    //     always {
+    //         junit 'coverage/clover.xml'
+    //     }
+    // }
 }

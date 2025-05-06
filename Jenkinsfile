@@ -3,6 +3,7 @@ pipeline {
 
     tools {
         nodejs "node24"
+        SonarQube "SonarQube"
     }
 
     environment {

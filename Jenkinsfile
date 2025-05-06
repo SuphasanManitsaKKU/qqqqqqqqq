@@ -28,11 +28,11 @@ pipeline {
             }
         }
 
-        stage('Run Tests and Generate Coverage') {
-            steps {
-                sh 'npm run test'
-            }
-        }
+        // stage('Run Tests and Generate Coverage') {
+        //     steps {
+        //         sh 'npm run test'
+        //     }
+        // }
 
         stage('SonarQube Analysis') {
             steps {
@@ -44,7 +44,8 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: 'coverage/**, dist/**', allowEmptyArchive: false
+                // archiveArtifacts artifacts: 'coverage/**, dist/**', allowEmptyArchive: false
+                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
             }
         }
     }

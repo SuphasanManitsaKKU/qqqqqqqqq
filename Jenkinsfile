@@ -50,7 +50,6 @@ pipeline {
         sh '''
             DEPLOY_DIR=/mnt/deploy-outside
             echo "🛠️ Ensuring deployment directory exists..."
-            mkdir -p $DEPLOY_DIR
 
             echo "🚮 Cleaning up old deployment..."
             rm -rf $DEPLOY_DIR/*

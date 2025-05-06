@@ -48,6 +48,7 @@ pipeline {
         stage('Deploy to Host') {
     steps {
         sh '''
+        ls -la
             DEPLOY_DIR=/mnt/deploy-outside
             echo "🛠️ Ensuring deployment directory exists..."
 
@@ -55,7 +56,7 @@ pipeline {
             rm -rf $DEPLOY_DIR/*
 
             echo "📦 Copying new build to $DEPLOY_DIR..."
-            cp -r dist/ $DEPLOY_DIR/
+            cp -r dist/ $DEPLOY_DIR/dist
 
             echo "🚀 Restarting application..."
             pm2 delete my-app || true
